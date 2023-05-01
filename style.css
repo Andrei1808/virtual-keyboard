@@ -63,3 +63,7 @@ body{
 .click-effect{
     background-color: blue;
 }
+
+.to-upper-case{
+    text-transform: uppercase;
+}
