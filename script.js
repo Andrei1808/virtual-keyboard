@@ -143,6 +143,8 @@ let textValues = ['CapsLock', 'Shift', 'Backspace', 'Enter', 'Ctrl', 'Tab', 'Del
 let middleButtons = ['Ctrl', 'Tab']
 let bigButtons = ['CapsLock', 'Shift', 'Backspace', 'Enter']
 
+alert("Здравствуйте, хотелось бы доработать эту работу. Буду вам очень признателен если дадите еще пару дней. Спасибо.")
+
 function createElement({
                            tag, classList, textContent, parentElement, dataIndex,
                        }) {
@@ -189,6 +191,28 @@ let wrapper = createElement({
     classList: ['wrapper'],
     parentElement: container
 })
+
+let info = createElement({
+    tag: 'div',
+    classList: ['info'],
+    parentElement: container
+})
+
+let infoTextOperationgSystem = createElement(
+    {
+        tag: 'p',
+        classList: ['info-text'],
+        textContent: 'Клавиатура создана в операционной системе Windows',
+        parentElement: info
+    })
+
+let infoTextButtonsCombination = createElement(
+    {
+        tag: 'p',
+        classList: ['info-text'],
+        textContent: 'Для переключения языка комбинация: левыe ctrl + shift',
+        parentElement: info
+    })
 
 
 function createButtonDescription() {
@@ -359,7 +383,7 @@ function deleteAfterCursor(event) {
 }
 
 
-function toUpperCase(event) {
+function changeKeyboardCaseValue(event) {
     const notMetaValues = document.querySelectorAll('.not-meta-values');
     if (event.getModifierState('CapsLock')) {
         notMetaValues.forEach(e => {
@@ -372,6 +396,29 @@ function toUpperCase(event) {
     }
 }
 
+let shiftFlag = false
+function symbolToUpperCase(event) {
+    if (event.shiftKey && !shiftFlag) {
+        console.log(event.getModifierState('Shift'))
+        shiftFlag = true
+        const notMetaValues = document.querySelectorAll('.not-meta-values');
+        notMetaValues.forEach(e => {
+            e.classList.add('to-upper-case')
+        })
+
+    }
+}
+
+function symbolToLowerCase(event) {
+    const notMetaValues = document.querySelectorAll('.not-meta-values');
+        event.preventDefault()
+    shiftFlag = false
+        notMetaValues.forEach(e => {
+            e.classList.remove('to-upper-case')
+        })
+
+}
+
 wrapper.addEventListener('mousedown', clickedButton);
 wrapper.addEventListener('mouseup', deleteButtonStyle);
 wrapper.addEventListener('mousedown', deleteLastSymbol);
@@ -380,7 +427,7 @@ wrapper.addEventListener('mousedown', addNewString);
 wrapper.addEventListener('mousedown', deleteAfterCursor);
 
 
-document.addEventListener('keydown', toUpperCase);
+document.addEventListener('keydown', changeKeyboardCaseValue);
 document.addEventListener('keydown', clickedButtonOnKeyboard);
 document.addEventListener('keyup', deleteButtonStyleOnKeyboard);
 document.addEventListener('keydown', changeLang);
@@ -388,4 +435,6 @@ document.addEventListener('keydown', deleteLastSymbol);
 document.addEventListener('keydown', addTabulation);
 document.addEventListener('keydown', addNewString);
 document.addEventListener('keydown', deleteAfterCursor);
+document.addEventListener('keydown', symbolToUpperCase);
+document.addEventListener('keyup', symbolToLowerCase);
 
