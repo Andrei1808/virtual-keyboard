@@ -1,4 +1,4 @@
-let FLAG = false
+let FLAG = localStorage.getItem('choosedLanguage') === 'true';
 let capsFlag = false;
 
 let symbols = [
@@ -217,6 +217,7 @@ let infoTextButtonsCombination = createElement(
 
 function createButtonDescription() {
     let language;
+
     for (let i = 0; i < symbols.length; i++) {
         if (FLAG === false) {
             language = symbols[i].en
@@ -339,6 +340,7 @@ function changeLang(event) {
         wrapper.innerHTML = '';
         createButtonDescription()
     }
+    localStorage.setItem('choosedLanguage', FLAG);
 }
 
 function deleteLastSymbol(event) {
@@ -414,6 +416,7 @@ function symbolToLowerCase(event) {
         });
     }
 }
+
 
 wrapper.addEventListener('mousedown', clickedButton);
 wrapper.addEventListener('mouseup', deleteButtonStyle);
