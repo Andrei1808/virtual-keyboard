@@ -143,7 +143,7 @@ let textValues = ['CapsLock', 'Shift', 'Backspace', 'Enter', 'Ctrl', 'Tab', 'Del
 let middleButtons = ['Ctrl', 'Tab']
 let bigButtons = ['CapsLock', 'Shift', 'Backspace', 'Enter']
 
-alert("Здравствуйте, хотелось бы доработать эту работу. Буду вам очень признателен если дадите еще пару дней. Спасибо.")
+//alert("Здравствуйте, хотелось бы доработать эту работу. Буду вам очень признателен если дадите еще пару дней. Спасибо.")
 
 function createElement({
                            tag, classList, textContent, parentElement, dataIndex,
@@ -296,7 +296,7 @@ function deleteButtonStyle(event) {
 
 function clickedButtonOnKeyboard(event) {
     event.preventDefault();
-    if (!textValues.includes(document.querySelector(`[data="${event.code}"]`).textContent) && (!event.getModifierState('CapsLock'))) {
+    if (!textValues.includes(document.querySelector(`[data="${event.code}"]`).textContent) && (!event.getModifierState('CapsLock')) && (!event.shiftKey)) {
         screenValue.push(document.querySelector(`[data="${event.code}"]`).textContent)
         screen.innerHTML = ''
         screen.innerHTML += screenValue.join("")
@@ -396,27 +396,23 @@ function changeKeyboardCaseValue(event) {
     }
 }
 
-let shiftFlag = false
+
 function symbolToUpperCase(event) {
-    if (event.shiftKey && !shiftFlag) {
-        console.log(event.getModifierState('Shift'))
-        shiftFlag = true
+    if (event.shiftKey) {
         const notMetaValues = document.querySelectorAll('.not-meta-values');
         notMetaValues.forEach(e => {
             e.classList.add('to-upper-case')
         })
-
     }
 }
 
 function symbolToLowerCase(event) {
-    const notMetaValues = document.querySelectorAll('.not-meta-values');
-        event.preventDefault()
-    shiftFlag = false
+    if (!event.shiftKey && (!event.getModifierState('CapsLock'))) {
+        const notMetaValues = document.querySelectorAll('.not-meta-values');
         notMetaValues.forEach(e => {
-            e.classList.remove('to-upper-case')
-        })
-
+            e.classList.remove('to-upper-case');
+        });
+    }
 }
 
 wrapper.addEventListener('mousedown', clickedButton);
