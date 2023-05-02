@@ -306,12 +306,6 @@ function clickedButtonOnKeyboard (event) {
   if (document.querySelector('[data="AltRight"]')) {
     document.querySelector('[data="ControlLeft"]').classList.remove('click-effect');
     document.querySelector(`[data="${event.code}"]`).classList.add('click-effect');
-  }
-  if (event.getModifierState('CapsLock')) {
-    console.log(event.getModifierState('CapsLock'));
-    document.querySelector(`[data="${event.code}"]`).classList.add('click-effect');
-  } else if (!event.getModifierState('CapsLock')) {
-    document.querySelector(`[data="${event.code}"]`).classList.remove('click-effect');
   } else {
     document.querySelector(`[data="${event.code}"]`).classList.add('click-effect');
   }
@@ -382,11 +376,13 @@ function changeKeyboardCaseValue (event) {
   if (event.getModifierState('CapsLock')) {
     notMetaValues.forEach(e => {
       e.classList.add('to-upper-case');
+      document.querySelector('[data="CapsLock"]').classList.add('click-effect');
     });
   } else {
     notMetaValues.forEach(e => {
       e.classList.remove('to-upper-case');
     });
+    document.querySelector('[data="CapsLock"]').classList.remove('click-effect');
   }
 }
 
@@ -415,7 +411,6 @@ wrapper.addEventListener('mousedown', addTabulation);
 wrapper.addEventListener('mousedown', addNewString);
 wrapper.addEventListener('mousedown', deleteAfterCursor);
 
-document.addEventListener('keydown', changeKeyboardCaseValue);
 document.addEventListener('keydown', clickedButtonOnKeyboard);
 document.addEventListener('keyup', deleteButtonStyleOnKeyboard);
 document.addEventListener('keydown', changeLang);
@@ -425,3 +420,4 @@ document.addEventListener('keydown', addNewString);
 document.addEventListener('keydown', deleteAfterCursor);
 document.addEventListener('keydown', symbolToUpperCase);
 document.addEventListener('keyup', symbolToLowerCase);
+document.addEventListener('keydown', changeKeyboardCaseValue);
