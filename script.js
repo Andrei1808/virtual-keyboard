@@ -6,25 +6,25 @@ const symbols = [
   {
     en: '`', ru: 'ё', code: 'Backquote'
   }, {
-    en: '1', ru: '1', code: 'Digit1'
+    en: '1', ru: '1', code: 'Digit1', shiftValue: '!'
   }, {
-    en: '2', ru: '2', code: 'Digit2'
+    en: '2', ru: '2', code: 'Digit2', shiftValue: '@'
   }, {
-    en: '3', ru: '3', code: 'Digit3'
+    en: '3', ru: '3', code: 'Digit3', shiftValue: '#'
   }, {
-    en: '4', ru: '4', code: 'Digit4'
+    en: '4', ru: '4', code: 'Digit4', shiftValue: '$'
   }, {
-    en: '5', ru: '5', code: 'Digit5'
+    en: '5', ru: '5', code: 'Digit5', shiftValue: '%'
   }, {
-    en: '6', ru: '6', code: 'Digit6'
+    en: '6', ru: '6', code: 'Digit6', shiftValue: '&'
   }, {
-    en: '7', ru: '7', code: 'Digit7'
+    en: '7', ru: '7', code: 'Digit7', shiftValue: '?'
   }, {
-    en: '8', ru: '8', code: 'Digit8'
+    en: '8', ru: '8', code: 'Digit8', shiftValue: '*'
   }, {
-    en: '9', ru: '9', code: 'Digit9'
+    en: '9', ru: '9', code: 'Digit9', shiftValue: '('
   }, {
-    en: '0', ru: '0', code: 'Digit0'
+    en: '0', ru: '0', code: 'Digit0', shiftValue: ')'
   }, {
     en: '-', ru: '-', code: 'Minus'
   }, {
@@ -267,6 +267,17 @@ function clickedButton (event) {
     event.target.classList.toggle('click-effect');
     notMetaValues.forEach(e => {
       e.classList.toggle('to-upper-case');
+      symbols.forEach(el => {
+        if (el.shiftValue && (el.code === e.getAttribute('data')) && e.classList.contains('to-upper-case')) {
+          console.log(e.getAttribute('data'));
+          console.log(el.code);
+          e.textContent = el.shiftValue;
+        } else if (el.shiftValue && (el.code === e.getAttribute('data')) && (!e.classList.contains('to-upper-case'))) {
+          console.log(el);
+          console.log(e.textContent);
+          e.textContent = el.en;
+        }
+      });
     });
     capsFlag = !capsFlag;
   } else if (event.target !== wrapper) {
@@ -367,30 +378,20 @@ function deleteAfterCursor (event) {
     screen.innerHTML = '';
     screen.innerHTML += screenValue.join('');
     screen.selectionStart = cursorPosition;
-    console.log(cursorPosition);
-  }
-}
-
-function changeKeyboardCaseValue (event) {
-  const notMetaValues = document.querySelectorAll('.not-meta-values');
-  if (event.getModifierState('CapsLock')) {
-    notMetaValues.forEach(e => {
-      e.classList.add('to-upper-case');
-      document.querySelector('[data="CapsLock"]').classList.add('click-effect');
-    });
-  } else {
-    notMetaValues.forEach(e => {
-      e.classList.remove('to-upper-case');
-    });
-    document.querySelector('[data="CapsLock"]').classList.remove('click-effect');
   }
 }
 
 function symbolToUpperCase (event) {
   if (event.shiftKey) {
+    console.log(event.shiftKey);
     const notMetaValues = document.querySelectorAll('.not-meta-values');
     notMetaValues.forEach(e => {
       e.classList.add('to-upper-case');
+      symbols.forEach(el => {
+        if (el.shiftValue && (el.code === e.getAttribute('data'))) {
+          e.textContent = el.shiftValue;
+        }
+      });
     });
   }
 }
@@ -400,7 +401,37 @@ function symbolToLowerCase (event) {
     const notMetaValues = document.querySelectorAll('.not-meta-values');
     notMetaValues.forEach(e => {
       e.classList.remove('to-upper-case');
+      symbols.forEach(el => {
+        if (el.shiftValue && (el.code === e.getAttribute('data'))) {
+          e.textContent = el.en;
+        }
+      });
     });
+  }
+}
+
+function changeKeyboardCaseValue (event) {
+  const notMetaValues = document.querySelectorAll('.not-meta-values');
+  if (event.getModifierState('CapsLock')) {
+    notMetaValues.forEach(e => {
+      e.classList.add('to-upper-case');
+      document.querySelector('[data="CapsLock"]').classList.add('click-effect');
+      symbols.forEach(el => {
+        if (el.shiftValue && (el.code === e.getAttribute('data'))) {
+          e.textContent = el.shiftValue;
+        }
+      });
+    });
+  } else if (!event.shiftKey) {
+    notMetaValues.forEach(e => {
+      e.classList.remove('to-upper-case');
+      symbols.forEach(el => {
+        if (el.shiftValue && (el.code === e.getAttribute('data'))) {
+          e.textContent = el.en;
+        }
+      });
+    });
+    document.querySelector('[data="CapsLock"]').classList.remove('click-effect');
   }
 }
 
