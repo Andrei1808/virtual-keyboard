@@ -269,12 +269,8 @@ function clickedButton (event) {
       e.classList.toggle('to-upper-case');
       symbols.forEach(el => {
         if (el.shiftValue && (el.code === e.getAttribute('data')) && e.classList.contains('to-upper-case')) {
-          console.log(e.getAttribute('data'));
-          console.log(el.code);
           e.textContent = el.shiftValue;
         } else if (el.shiftValue && (el.code === e.getAttribute('data')) && (!e.classList.contains('to-upper-case'))) {
-          console.log(el);
-          console.log(e.textContent);
           e.textContent = el.en;
         }
       });
@@ -295,9 +291,36 @@ function clickedButton (event) {
   }
 }
 
+function clickByShift (event) {
+  const notMetaValues = document.querySelectorAll('.not-meta-values');
+  if (event.target.textContent === 'Shift' && (event.target.classList.contains('click-effect'))) {
+    event.target.classList.add('click-effect');
+    notMetaValues.forEach(e => {
+      e.classList.add('to-upper-case');
+      symbols.forEach(el => {
+        if (el.shiftValue && (el.code === e.getAttribute('data')) && e.classList.contains('to-upper-case')) {
+          e.textContent = el.shiftValue;
+        }
+      });
+    });
+  }
+}
+
 function deleteButtonStyle (event) {
+  const notMetaValues = document.querySelectorAll('.not-meta-values');
   if (event.target.textContent !== 'CapsLock') {
     event.target.classList.remove('click-effect');
+  }
+  if (event.target.textContent === 'Shift') {
+    event.target.classList.remove('click-effect');
+    notMetaValues.forEach(e => {
+      e.classList.remove('to-upper-case');
+      symbols.forEach(el => {
+        if (el.shiftValue && (el.code === e.getAttribute('data')) && (!e.classList.contains('to-upper-case'))) {
+          e.textContent = el.en;
+        }
+      });
+    });
   }
 }
 
@@ -441,6 +464,7 @@ wrapper.addEventListener('mousedown', deleteLastSymbol);
 wrapper.addEventListener('mousedown', addTabulation);
 wrapper.addEventListener('mousedown', addNewString);
 wrapper.addEventListener('mousedown', deleteAfterCursor);
+wrapper.addEventListener('mousedown', clickByShift);
 
 document.addEventListener('keydown', clickedButtonOnKeyboard);
 document.addEventListener('keyup', deleteButtonStyleOnKeyboard);
